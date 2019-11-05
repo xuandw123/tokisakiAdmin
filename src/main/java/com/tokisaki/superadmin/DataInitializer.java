@@ -35,14 +35,19 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-    	log.debug("initializing task data...");
+    	long taskCount=this.tasks.count();
+    	if(taskCount>0) {
+    		log.info("initializing already...");
+    		return;
+    	}
+    	log.info("initializing task data...");
     	 this.tasks.save(Task.builder().taskName("shorttask1").taskScore(new BigDecimal(5))
     			 .startDate(new Date()).endDate(new Date()).taskStatus(StatusEnum.Normal).taskType(TaskTypeEnum.ShortTerm) .build());
     	 this.tasks.save(Task.builder().taskName("shorttask2").taskScore(new BigDecimal(5))
     			 .startDate(new Date()).endDate(new Date()).taskStatus(StatusEnum.Normal).taskType(TaskTypeEnum.ShortTerm) .build());
     	 this.tasks.save(Task.builder().taskName("longtask1").taskScore(new BigDecimal(5))
     			 .startDate(new Date()).endDate(new Date()).taskStatus(StatusEnum.Normal).taskType(TaskTypeEnum.LongTerm) .build());
-    	log.debug("initializing group data...");
+    	log.info("initializing group data...");
         Arrays.asList("1组", "2组", "3组").forEach(v -> this.userGroup.saveAndFlush(UserGroup.builder().groupName(v)
         		.groupStatus(StatusEnum.Normal).build()));
    
@@ -74,7 +79,7 @@ public class DataInitializer implements CommandLineRunner {
             .build()
         );
 
-        log.debug("printing all users...");
+        log.info("printing all users...");
         this.users.findAll().forEach(v -> log.debug(" User :" + v.toString()));
     }
 }
