@@ -1,0 +1,54 @@
+server:
+  port: 8090
+  
+jwt:
+  secretKey: secretssecretssecretssecretssecretssecretssecretssecretssecretssecretssecrets
+  validityInMs: 3600000
+  
+spring:
+  jackson:
+    mapper:
+      DEFAULT_VIEW_INCLUSION: true 
+    serialization: 
+      INDENT_OUTPUT: true
+      WRITE_DATES_AS_TIMESTAMPS: false
+    deserialization:
+      FAIL_ON_IGNORED_PROPERTIES: false
+      FAIL_ON_UNKNOWN_PROPERTIES: false
+      ACCEPT_SINGLE_VALUE_AS_ARRAY: true
+    default-property-inclusion: NON_EMPTY 
+
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3706/tokisaki_admin
+    username: xx
+    password: xx
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      connection-test-query: SELECT 1 FROM DUAL
+      idle-timeout: 10000
+      minimum-idle: 5
+      maximum-pool-size: 20
+      connection-timeout: 60000
+  jpa:
+    openInView: false
+    show_sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      # fixes Caused by: java.sql.SQLFeatureNotSupportedException: Method org.postgresql.jdbc.PgConnection.createClob() is not yet implemented.
+      hibernate.jdbc.lob.non_contextual_creation: true
+
+  data:
+    jpa:
+      repositories.enabled: true
+
+logging:
+  level: 
+    root: INFO
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    com.example: DEBUG
+  file: app.log
+  
