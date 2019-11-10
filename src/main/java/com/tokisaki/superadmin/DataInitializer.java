@@ -1,6 +1,9 @@
 package com.tokisaki.superadmin;
 
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -40,40 +43,37 @@ public class DataInitializer implements CommandLineRunner {
     		log.info("initializing already...");
     		return;
     	}
-    	log.info("initializing task data...");
-    	 this.tasks.save(Task.builder().taskName("shorttask1").taskScore(new BigDecimal(5))
-    			 .startDate(new Date()).endDate(new Date()).taskStatus(StatusEnum.Normal).taskType(TaskTypeEnum.ShortTerm) .build());
-    	 this.tasks.save(Task.builder().taskName("shorttask2").taskScore(new BigDecimal(5))
-    			 .startDate(new Date()).endDate(new Date()).taskStatus(StatusEnum.Normal).taskType(TaskTypeEnum.ShortTerm) .build());
-    	 this.tasks.save(Task.builder().taskName("longtask1").taskScore(new BigDecimal(5))
-    			 .startDate(new Date()).endDate(new Date()).taskStatus(StatusEnum.Normal).taskType(TaskTypeEnum.LongTerm) .build());
+    
     	log.info("initializing group data...");
         Arrays.asList("1组", "2组", "3组").forEach(v -> this.userGroup.saveAndFlush(UserGroup.builder().groupName(v)
         		.groupStatus(StatusEnum.Normal).build()));
    
-
+        UserGroup userGroup =this.userGroup.findByGroupName("1组").get();
         this.users.save(User.builder()
             .username("user1")
             .password(this.passwordEncoder.encode("password"))
-            .nickName("test")
+            .nickName("testUser")
             .selfIcon(false)
+            .userGroup(userGroup)
             .userStatus(StatusEnum.Normal)
             .roles(Arrays.asList( "ROLE_USER"))
             .build()
         );
         this.users.save(User.builder()
-                .username("user2")
+                .username("leader1")
                 .password(this.passwordEncoder.encode("password"))
-                .nickName("test")
+                .nickName("testLeader")
                 .selfIcon(false)
+                .userGroup(userGroup)
                 .userStatus(StatusEnum.Normal)
-                .roles(Arrays.asList( "ROLE_USER"))
+                .roles(Arrays.asList( "ROLE_USER","ROLE_LEADER"))
                 .build()
             );
         this.users.save(User.builder()
             .username("admin")
             .password(this.passwordEncoder.encode("password"))
             .userStatus(StatusEnum.Normal)
+            .nickName("testAdmin")
             .roles(Arrays.asList("ROLE_USER", "ROLE_LEADER","ROLE_ADMIN"))
             .selfIcon(false)
             .build()
@@ -81,5 +81,20 @@ public class DataInitializer implements CommandLineRunner {
 
         log.info("printing all users...");
         this.users.findAll().forEach(v -> log.debug(" User :" + v.toString()));
+        LocalDateTime localDate1 = LocalDateTime.of(2019, 11, 8,16,12,12);
+        LocalDateTime localDate2 = LocalDateTime.of(2019, 11, 18,18,16,12);
+        ZoneId zone = ZoneId.systemDefault();
+        Instant instant1 = localDate1.atZone(zone).toInstant();
+        Date date1 = Date.from(instant1);
+        Instant instant2 = localDate2.atZone(zone).toInstant();
+        Date date2 = Date.from(instant2);
+    	log.info("initializing task data...");
+    	User user=this.users.findByUsername("admin").get();
+   	 this.tasks.save(Task.builder().taskName("shorttask1").taskScore(new BigDecimal(5))
+   			 .startDate(date1).endDate(date2).createUser(user).taskDetail("taskdetail1").taskStatus(StatusEnum.Normal).taskType(TaskTypeEnum.ShortTerm) .build());
+   	 this.tasks.save(Task.builder().taskName("shorttask2").createUser(user).taskScore(new BigDecimal(5))
+   			 .startDate(new Date()).endDate(new Date()).taskDetail("taskdetail2").taskStatus(StatusEnum.Normal).taskType(TaskTypeEnum.ShortTerm) .build());
+   	 this.tasks.save(Task.builder().taskName("longtask1").createUser(user).taskScore(new BigDecimal(5))
+   			 .startDate(new Date()).endDate(new Date()).taskDetail("taskdetail3").taskStatus(StatusEnum.Normal).taskType(TaskTypeEnum.LongTerm) .build());
     }
 }
