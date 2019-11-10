@@ -52,13 +52,8 @@ public class TaskController {
     "application/json", produces = "application/json")
     public ResponseEntity<Object>  updateTask(@RequestBody Task taskForm, HttpServletRequest request) throws InvalidInputParamException{
     	Task saved = this.taskService.save(taskForm);
-        return created(
-            ServletUriComponentsBuilder
-                .fromContextPath(request)
-                .path("/v1/task/{id}")
-                .buildAndExpand(saved.getId())
-                .toUri())
-            .build();
+        return ok(
+        		saved);
     }
     
     @PostMapping(name = "Save Task", value = "",  consumes =
