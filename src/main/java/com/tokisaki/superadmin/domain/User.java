@@ -2,6 +2,7 @@ package com.tokisaki.superadmin.domain;
 
 import static java.util.stream.Collectors.toList;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -18,6 +19,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
 
+import org.springframework.data.annotation.Transient;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -83,6 +85,8 @@ public class User   extends AbstractLifecycleEntity implements UserDetails {
      */
     @NotEmpty
     private String password;
+    @Transient
+    private BigDecimal totalScore;
     /**
    	 * userGroup.
    	 */
