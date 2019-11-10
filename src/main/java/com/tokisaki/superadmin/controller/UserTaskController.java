@@ -51,17 +51,12 @@ public class UserTaskController {
                 .toUri())
             .build();
     }
-    @PostMapping(name = "Audit User Score", value = "task/{taskId}/audit",  consumes =
+    @PostMapping(name = "Audit User Score", value = "task/{usertaskId}/audit",  consumes =
     	    "application/json", produces = "application/json")
-    	    public ResponseEntity<Object>  AuditScore(@RequestBody UserTask form, @PathVariable("taskId") String taskId,HttpServletRequest request) {
+    	    public ResponseEntity<Object>  AuditScore(@RequestBody UserTask form, @PathVariable("usertaskId") String userTaskId,HttpServletRequest request) {
     	    	form.setUser(CommonUtil.getCurrentUser().get());
     	    	UserTask saved = this.userTaskRepository.save(form);
-    	        return created(
-    	            ServletUriComponentsBuilder
-    	                .fromContextPath(request)
-    	                .path("/v1/usertask/{taskId}")
-    	                .buildAndExpand(saved.getId())
-    	                .toUri())
-    	            .build();
+    	        return ok(
+    	        		saved);
     	    }
 }

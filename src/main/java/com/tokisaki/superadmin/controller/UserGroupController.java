@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,7 +43,7 @@ public class UserGroupController {
 				.buildAndExpand(saved.getId()).toUri()).build();
 	}
 
-	@PostMapping(name = "update user group inviteCode", value = "/updateInviteCode/{groupId}", consumes = "application/json", produces = "application/json")
+	@PutMapping(name = "update user group inviteCode", value = "/updateInviteCode/{groupId}", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<Object> updateUserGroupInviteCode(@RequestBody UserGroup usergroupForm,
 			@PathVariable("groupId") String groupId) {
 		

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,18 +49,19 @@ public class TaskController {
         return ok(this.taskRepository.findById(id).orElseThrow( () -> new NotFoundException("Task",id)));
     }
     
-    @PostMapping(name = "Save Task", value = "/{taskId}",  consumes =
+    @PutMapping(name = "Update Task", value = "/{taskId}",  consumes =
     "application/json", produces = "application/json")
-    public ResponseEntity<Object>  updateTask(@RequestBody Task taskForm, HttpServletRequest request) throws InvalidInputParamException{
-    	Task saved = this.taskService.save(taskForm);
+    public ResponseEntity<Object>  updateTask(@RequestBody Task taskForm, @PathVariable("taskId") String taskId) throws InvalidInputParamException{
+    	taskForm.setId(taskId);
+    	Task saved = this.taskService.update(taskForm);
         return ok(
         		saved);
     }
     
-    @PostMapping(name = "Save Task", value = "",  consumes =
+    @PostMapping(name = "Insert Task", value = "",  consumes =
     "application/json", produces = "application/json")
     public ResponseEntity<Object>  insertTask(@RequestBody Task taskForm, HttpServletRequest request) throws InvalidInputParamException{
-    	Task saved = this.taskService.save(taskForm);
+    	Task saved = this.taskService.insert(taskForm);
         return created(
             ServletUriComponentsBuilder
                 .fromContextPath(request)
