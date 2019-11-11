@@ -3,6 +3,9 @@ package com.tokisaki.superadmin.controller;
 import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.ok;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,14 +63,10 @@ public class TaskController {
     
     @PostMapping(name = "Insert Task", value = "",  consumes =
     "application/json", produces = "application/json")
-    public ResponseEntity<Object>  insertTask(@RequestBody Task taskForm, HttpServletRequest request) throws InvalidInputParamException{
+    public ResponseEntity<Object>  insertTask(@RequestBody Task taskForm, HttpServletRequest request) throws InvalidInputParamException, URISyntaxException{
     	Task saved = this.taskService.insert(taskForm);
-        return created(
-            ServletUriComponentsBuilder
-                .fromContextPath(request)
-                .path("/v1/task/{id}")
-                .buildAndExpand(saved.getId())
-                .toUri())
+        return created(new URI(saved.getId())
+          )
             .build();
     }
 

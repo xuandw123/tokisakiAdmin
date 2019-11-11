@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.tokisaki.superadmin.common.InviteCodeUtil;
 import com.tokisaki.superadmin.domain.UserGroup;
+import com.tokisaki.superadmin.enums.StatusEnum;
+import com.tokisaki.superadmin.enums.TaskTypeEnum;
 import com.tokisaki.superadmin.exception.InvalidInputParamException;
 import com.tokisaki.superadmin.repository.UserGroupRepository;
 import com.tokisaki.superadmin.service.UserGroupService;
@@ -38,6 +41,8 @@ public class UserGroupController {
 	public ResponseEntity<Object> insertUserGroup(@RequestBody UserGroup usergroupForm, HttpServletRequest request)
 			throws InvalidInputParamException {
 		usergroupForm.setGroupInviteCode(InviteCodeUtil.generateShortUuid());
+		usergroupForm.setDisabled(false);
+		usergroupForm.setGroupStatus(StatusEnum.Normal);
 		UserGroup saved = this.userGroupService.save(usergroupForm);
 		return created(ServletUriComponentsBuilder.fromContextPath(request).path("/v1/usergroup/{id}")
 				.buildAndExpand(saved.getId()).toUri()).build();
@@ -46,12 +51,19 @@ public class UserGroupController {
 	@PutMapping(name = "update user group inviteCode", value = "/updateInviteCode/{groupId}", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<Object> updateUserGroupInviteCode(@RequestBody UserGroup usergroupForm,
 			@PathVariable("groupId") String groupId) {
-		
+		usergroupForm.setDisabled(false);
+		usergroupForm.setGroupStatus(StatusEnum.Normal);
 		usergroupForm.setGroupInviteCode(InviteCodeUtil.generateShortUuid());
 		UserGroup saved = this.userGroupService.save(usergroupForm);
 		return ok(saved);
 	}
-
+	@PutMapping(name = "update user group status", value = "/updateGroupStatus/{groupId}", consumes = "application/json", produces = "application/json")
+	public ResponseEntity<Object> changeUserGroupStatus(@RequestParam("taskType") StatusEnum statusEnum,
+			@PathVariable("groupId") String groupId) {
+		
+		UserGroup saved = this.userGroupService.changeUserGroupStatus(statusEnum,groupId);
+		return ok(saved);
+	}
 	@GetMapping("/listall")
 	public ResponseEntity<Object> all() {
 		return ok(this.userGroupRepository.findAll());
