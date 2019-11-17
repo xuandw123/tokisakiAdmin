@@ -48,16 +48,13 @@ public class UserGroupController {
 				.buildAndExpand(saved.getId()).toUri()).build();
 	}
 
-	@PutMapping(name = "update user group inviteCode", value = "/updateInviteCode/{groupId}", consumes = "application/json", produces = "application/json")
-	public ResponseEntity<Object> updateUserGroupInviteCode(@RequestBody UserGroup usergroupForm,
+	@PutMapping(name = "update user group inviteCode", value = "/updateInviteCode/{groupId}")
+	public ResponseEntity<Object> updateUserGroupInviteCode(
 			@PathVariable("groupId") String groupId) {
-		usergroupForm.setDisabled(false);
-		usergroupForm.setGroupStatus(StatusEnum.Normal);
-		usergroupForm.setGroupInviteCode(InviteCodeUtil.generateShortUuid());
-		UserGroup saved = this.userGroupService.save(usergroupForm);
+		UserGroup saved = this.userGroupService.updateUserGroupInviteCode(groupId);
 		return ok(saved);
 	}
-	@PutMapping(name = "update user group status", value = "/updateGroupStatus/{groupId}", consumes = "application/json", produces = "application/json")
+	@PutMapping(name = "update user group status", value = "/updateGroupStatus/{groupId}")
 	public ResponseEntity<Object> changeUserGroupStatus(@RequestParam("taskType") StatusEnum statusEnum,
 			@PathVariable("groupId") String groupId) {
 		

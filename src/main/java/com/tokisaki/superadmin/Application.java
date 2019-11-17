@@ -1,7 +1,13 @@
 package com.tokisaki.superadmin;
 
+import java.util.Optional;
+import java.util.TimeZone;
+
+import javax.annotation.PostConstruct;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -15,13 +21,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.tokisaki.superadmin.domain.User;
 
-import java.util.Optional;
-import java.util.TimeZone;
-
-import javax.annotation.PostConstruct;
-
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.*"})
+@EnableFeignClients
 public class Application {
 	  @PostConstruct
 	    void started() {

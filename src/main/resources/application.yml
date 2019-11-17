@@ -1,6 +1,9 @@
 server:
   port: 8090
-  
+
+tencentCloud-service:
+  url: xxxx
+    
 jwt:
   secretKey: secretssecretssecretssecretssecretssecretssecretssecretssecretssecretssecrets
   validityInMs: 3600000
