@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.tokisaki.superadmin.common.CommonUtil;
 import com.tokisaki.superadmin.domain.UserGroup;
 import com.tokisaki.superadmin.enums.StatusEnum;
 import com.tokisaki.superadmin.repository.UserGroupRepository;
@@ -44,15 +45,17 @@ public class FileUploadController {
 	    public  ResponseEntity<Object>  upload(@RequestParam(value = "file") MultipartFile file, @RequestParam("taskId") String taskId){
 		 String newFileName = UUID.randomUUID().toString();
 		 File localFile = null;
+		 String extName=CommonUtil.ext(file.getOriginalFilename());
+		 String name="";
 		 try {
 	            localFile = File.createTempFile("temp",null);
 	            file.transferTo(localFile);
 	            
-		 fileUploadService.fileUpload(newFileName, localFile);
+	            name=fileUploadService.fileUpload(newFileName, localFile,extName);
 		 }catch (Exception e){
 			 logger.error(e.getMessage());
 		 }
-		 return ok(null);
+		 return ok(name);
 	}
 
 	

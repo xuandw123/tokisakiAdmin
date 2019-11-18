@@ -17,4 +17,14 @@ public class CommonUtil {
 	        }
 	      return Optional.of(((User) authentication.getPrincipal()));
 	    }
+	  
+	  public static String ext(String filename) {
+	        int index = filename.lastIndexOf(".");
+	 
+	        if (index == -1) {
+	            return null;
+	        }
+	        String result = filename.substring(index + 1);
+	        return result;
+		}
 }

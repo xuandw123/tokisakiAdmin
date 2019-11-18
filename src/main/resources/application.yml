@@ -2,7 +2,10 @@ server:
   port: 8090
 
 tencentCloud-service:
-  url: xxxx
+  secretId: xxxx
+  secretKey: xxxx
+  region: xxxx
+  bucketName: xxxx
     
 jwt:
   secretKey: secretssecretssecretssecretssecretssecretssecretssecretssecretssecretssecrets

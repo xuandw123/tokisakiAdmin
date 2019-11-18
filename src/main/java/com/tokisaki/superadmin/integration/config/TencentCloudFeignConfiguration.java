@@ -1,53 +1,27 @@
 package com.tokisaki.superadmin.integration.config;
 
 
-import java.security.KeyStore;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.SSLSession;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-import feign.Client;
-
-@Configuration
+@Component
+@Getter
+@Setter
 public class TencentCloudFeignConfiguration {
 
-    //@Value("${jenkinsfile-service.username}")
-   // private String username;
+    @Value("${tencentCloud-service.secretId}")
+   private String secretId;
+    @Value("${tencentCloud-service.secretKey}")
+    private String secretKey;
+    @Value("${tencentCloud-service.region}")
+    private String region;
+    @Value("${tencentCloud-service.bucketName}")
+    private String bucketName;
 
-   	
-
-    // @Bean
-    // public Logger.Level feignLoggerLevel() {
-    // return Logger.Level.FULL;
-    // }
-
-    //@Bean
-   // public BasicAuthRequestInterceptor basicAuthRequestInterceptor() {
-   //     return new BasicAuthRequestInterceptor(username, password);
-   // }*/
-
-    @Bean
-    public Client feignclient() {
-        KeyStore trustStore;
-        try {
-            trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            trustStore.load(null, null);
-            return new Client.Default(new IgnoreCertificateSSLSocketFactory(trustStore), new HostnameVerifier() {
-                @Override
-                public boolean verify(String hostname, SSLSession session) {
-                    return true;
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new Client.Default(null, null);
-        }
-
-    }
-
+    
 
 
 }
