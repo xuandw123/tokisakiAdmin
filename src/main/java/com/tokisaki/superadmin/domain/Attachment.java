@@ -1,9 +1,13 @@
 package com.tokisaki.superadmin.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import com.tokisaki.superadmin.enums.FileTypeEnum;
 import com.tokisaki.superadmin.model.AbstractLifecycleEntity;
 
 import lombok.AllArgsConstructor;
@@ -28,8 +32,11 @@ public class Attachment   extends AbstractLifecycleEntity {
 	 */
     @NotEmpty
     private String attachName;
-    @NotEmpty
-    private String attachType;
-    @NotEmpty
-    private String attachUrl;
+    @Column(columnDefinition = "ENUM('Task', 'UserTask', 'ScoreAward')")
+	@Enumerated(EnumType.STRING)
+    private FileTypeEnum attachType;
+    @Column
+    private String attachExtName;
+    @Column
+    private String attachFullUrl;
 }

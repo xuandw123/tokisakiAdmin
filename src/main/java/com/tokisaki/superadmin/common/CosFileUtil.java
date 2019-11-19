@@ -15,6 +15,7 @@ import com.qcloud.cos.model.PutObjectRequest;
 import com.qcloud.cos.model.PutObjectResult;
 import com.qcloud.cos.model.StorageClass;
 import com.qcloud.cos.region.Region;
+import com.tokisaki.superadmin.enums.FileTypeEnum;
 import com.tokisaki.superadmin.integration.config.TencentCloudFeignConfiguration;
 
 
@@ -25,7 +26,7 @@ public class CosFileUtil {
 	
 
 	 // 从输入流进行读取并上传到COS
-    public  String SimpleUploadFileFromStream(String key,File localFile,String extName) {
+    public  String SimpleUploadFileFromStream(String key,File localFile,String extName,FileTypeEnum fileType) {
     	String etag="";
     	String secretId=tencentCloudFeignConfiguration.getSecretId();
     	String secretKey=tencentCloudFeignConfiguration.getSecretKey();
@@ -38,11 +39,11 @@ public class CosFileUtil {
         // 3 生成cos客户端
         COSClient cosclient = new COSClient(cred, clientConfig);
         // bucket名需包含appid
-        
+        String fileTypeName =CommonUtil.toLowerCaseFirstOne(fileType.toString());
         
         //String key = "test/test3.jpg";
         //File localFile = new File("C://2/1.jpg");
-        String keyName ="task/"+key+"."+extName;
+        String keyName =fileTypeName+"/"+key+"."+extName;
         System.out.println("keyName:"+keyName);
         PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, keyName, localFile);
         // 设置存储类型, 默认是标准(Standard), 低频(standard_ia)
@@ -60,7 +61,7 @@ public class CosFileUtil {
         
         // 关闭客户端        
         cosclient.shutdown();
-        return keyName;
+        return etag;
     }
     public static void main(String[] args) {
     	//SimpleUploadFileFromStream();
