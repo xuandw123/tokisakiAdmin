@@ -36,6 +36,7 @@ public class TaskService  {
     	dbTask.setTaskDetail(task.getTaskDetail());
     	dbTask.setTaskScore(task.getTaskScore());
     	dbTask.setTaskOrder(task.getTaskOrder());
+    	dbTask.setTaskAttachment(task.getTaskAttachment());
     	return this.taskRepository.save(dbTask);
     }
     

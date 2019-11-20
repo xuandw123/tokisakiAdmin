@@ -24,6 +24,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tokisaki.superadmin.enums.StatusEnum;
 import com.tokisaki.superadmin.model.AbstractLifecycleEntity;
 
@@ -84,6 +85,7 @@ public class User   extends AbstractLifecycleEntity implements UserDetails {
      * password.
      */
     @NotEmpty
+    @JsonIgnore
     private String password;
     @Transient
     private BigDecimal totalScore;

@@ -51,7 +51,7 @@ public class UserTaskController {
                 .toUri())
             .build();
     }
-    @PostMapping(name = "Audit User Score", value = "task/{usertaskId}/audit",  consumes =
+    @PostMapping(name = "Audit User Score", value = "task/audit/{usertaskId}/",  consumes =
     	    "application/json", produces = "application/json")
     	    public ResponseEntity<Object>  AuditScore(@RequestBody UserTask form, @PathVariable("usertaskId") String userTaskId,HttpServletRequest request) {
     	    	form.setUser(CommonUtil.getCurrentUser().get());

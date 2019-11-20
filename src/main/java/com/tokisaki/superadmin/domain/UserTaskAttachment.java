@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.tokisaki.superadmin.model.AbstractLifecycleEntity;
 
@@ -31,7 +32,7 @@ public class UserTaskAttachment extends AbstractLifecycleEntity implements Seria
 	/**
 	 * taskName.
 	 */
-	@JsonIgnore
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="USERTASK_ID")
     private UserTask userTask;

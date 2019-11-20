@@ -3,13 +3,15 @@ package com.tokisaki.superadmin.domain;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -76,9 +78,11 @@ public class Task extends AbstractLifecycleEntity implements Serializable {
 	 */
 	@Column
     private BigDecimal taskScore;
+	
 	@JsonManagedReference
-	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<TaskAttachment> taskAttachment;
+	@OneToMany(mappedBy = "task", fetch=FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@Builder.Default
+	private Set<TaskAttachment> taskAttachment= new HashSet<>();
 	/**
 	 * type
 	 * 0 短期

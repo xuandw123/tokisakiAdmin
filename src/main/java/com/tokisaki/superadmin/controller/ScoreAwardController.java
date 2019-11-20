@@ -6,67 +6,66 @@ import static org.springframework.http.ResponseEntity.ok;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tokisaki.superadmin.domain.Task;
-import com.tokisaki.superadmin.enums.TaskTypeEnum;
+import com.tokisaki.superadmin.domain.ScoreAward;
 import com.tokisaki.superadmin.exception.InvalidInputParamException;
 import com.tokisaki.superadmin.exception.NotFoundException;
-import com.tokisaki.superadmin.repository.TaskRepository;
-import  com.tokisaki.superadmin.service.TaskService;
+import com.tokisaki.superadmin.repository.ScoreAwardRepository;
+import com.tokisaki.superadmin.service.ScoreAwardService;
 
 @RestController
 @RequestMapping("/api/v1/scoreAward")
 public class ScoreAwardController {
 	@Autowired
-    private TaskRepository taskRepository;
+	private ScoreAwardRepository scoreAwardRepository;
 	@Autowired
-    private TaskService taskService;
-    public ScoreAwardController(TaskRepository taskRepository) {
-        this.taskRepository = taskRepository;
-    }
+	private ScoreAwardService scoreAwardService;
 
+	public ScoreAwardController(ScoreAwardRepository scoreAwardRepository) {
+		this.scoreAwardRepository = scoreAwardRepository;
+	}
 
-    @GetMapping("")
-    public ResponseEntity<Object>  all() {
-        return ok(this.taskRepository.findAll());
-    }
-    @GetMapping("/search/")
-    public ResponseEntity<Object>  searchByType(@RequestParam("taskType") TaskTypeEnum taskType) {
-        return ok(this.taskRepository.findByTaskType(taskType));
-    }
-    @GetMapping("/{id}")
-    public ResponseEntity<Object>  getById(@PathVariable("id") String id) {
-        return ok(this.taskRepository.findById(id).orElseThrow( () -> new NotFoundException("Task",id)));
-    }
-    
-    @PutMapping(name = "Update Task", value = "/{taskId}",  consumes =
-    "application/json", produces = "application/json")
-    public ResponseEntity<Object>  updateTask(@RequestBody Task taskForm, @PathVariable("taskId") String taskId) throws InvalidInputParamException{
-    	taskForm.setId(taskId);
-    	Task saved = this.taskService.update(taskForm);
-        return ok(
-        		saved);
-    }
-    
-    @PostMapping(name = "Insert Task", value = "",  consumes =
-    "application/json", produces = "application/json")
-    public ResponseEntity<Object>  insertTask(@RequestBody Task taskForm, HttpServletRequest request) throws InvalidInputParamException, URISyntaxException{
-    	Task saved = this.taskService.insert(taskForm);
-        return created(new URI(saved.getId())
-          )
-            .build();
-    }
+	@GetMapping("")
+	public ResponseEntity<Object> all() {
+		return ok(this.scoreAwardRepository.findAll());
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<Object> getById(@PathVariable("id") String id) {
+		return ok(this.scoreAwardRepository.findById(id).orElseThrow(() -> new NotFoundException("ScoreAward", id)));
+	}
+
+	@PutMapping(name = "Update ScoreAward", value = "/{scoreAwardId}", consumes = "application/json", produces = "application/json")
+	public ResponseEntity<Object> updateScoreAward(@RequestBody ScoreAward scoreAwardForm,
+			@PathVariable("scoreAwardId") String scoreAwardId) throws InvalidInputParamException {
+		scoreAwardForm.setId(scoreAwardId);
+		ScoreAward saved = this.scoreAwardService.update(scoreAwardForm);
+		return ok(saved);
+	}
+
+	@PostMapping(name = "Insert ScoreAward", value = "", consumes = "application/json", produces = "application/json")
+	public ResponseEntity<Object> insertScoreAward(@RequestBody ScoreAward scoreAwardForm)
+			throws InvalidInputParamException, URISyntaxException {
+		ScoreAward saved = this.scoreAwardService.insert(scoreAwardForm);
+		return created(new URI(saved.getId())).build();
+	}
+
+	@DeleteMapping(name = "Delete ScoreAward", value = "/{scoreAwardId}",  consumes =
+    	    "application/json", produces = "application/json")
+    	    public ResponseEntity<Object>  deleteScoreAward(@PathVariable("scoreAwardId") String scoreAwardId) throws InvalidInputParamException, URISyntaxException{
+  
+    	scoreAwardService.delete(scoreAwardId);
+    	        return ok("delete:"+scoreAwardId);
+    	    }
 
 }

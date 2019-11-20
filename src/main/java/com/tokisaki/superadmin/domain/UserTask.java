@@ -2,11 +2,13 @@ package com.tokisaki.superadmin.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -61,6 +63,7 @@ public class UserTask   extends AbstractLifecycleEntity  {
 	private User auditUser;
     
 	@JsonManagedReference
-	@OneToMany(mappedBy = "userTask", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<UserTaskAttachment> utAttachment;
+	@OneToMany(mappedBy = "userTask", fetch=FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@Builder.Default
+	private Set<UserTaskAttachment> utAttachment= new HashSet<>();
 }

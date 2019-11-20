@@ -8,7 +8,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tokisaki.superadmin.model.AbstractLifecycleEntity;
 
 import lombok.AllArgsConstructor;
@@ -31,7 +32,7 @@ public class ScoreAwardAttachment extends AbstractLifecycleEntity implements Ser
 	/**
 	 * taskName.
 	 */
-	@JsonIgnore
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name="ScoreAward_ID")
     private ScoreAward scoreAward;
