@@ -1,8 +1,8 @@
 package com.tokisaki.superadmin.domain;
 
 import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,8 +14,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tokisaki.superadmin.model.AbstractLifecycleEntity;
 
@@ -53,7 +54,8 @@ public class ScoreAward   extends AbstractLifecycleEntity  {
 	private User createUser;
     
     @JsonManagedReference
+    @Fetch(FetchMode.SELECT)
 	@OneToMany(mappedBy = "scoreAward",fetch=FetchType.EAGER,  cascade = CascadeType.ALL, orphanRemoval = true)
 	@Builder.Default
-	private Set<ScoreAwardAttachment> scoreAwardAttachment= new HashSet<>();
+	private List<ScoreAwardAttachment> scoreAwardAttachment= new ArrayList<>();
 }

@@ -1,6 +1,7 @@
 package com.tokisaki.superadmin.common;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,6 +28,11 @@ public class CommonUtil {
 	        String result = filename.substring(index + 1);
 	        return result;
 		}
+	  public static String generateUUID() {
+	     
+	        return UUID.randomUUID().toString().replaceAll("-","");
+		}
+	  
 	  public static String toLowerCaseFirstOne(String s) {
 	        if (Character.isLowerCase(s.charAt(0))) {
 	            return s;

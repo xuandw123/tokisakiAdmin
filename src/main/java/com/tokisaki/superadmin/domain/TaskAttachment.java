@@ -1,7 +1,5 @@
 package com.tokisaki.superadmin.domain;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -14,16 +12,18 @@ import com.tokisaki.superadmin.model.AbstractLifecycleEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "T_TASK_Attachment")
-@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TaskAttachment extends AbstractLifecycleEntity implements Serializable {
+@Getter
+@Setter
+public class TaskAttachment extends AbstractLifecycleEntity  {
 
     /**
 	 * 
@@ -34,7 +34,6 @@ public class TaskAttachment extends AbstractLifecycleEntity implements Serializa
 	 */
 	@JsonBackReference
 	@ManyToOne
-	@JoinColumn(name="TASK_ID")
     private Task task;
 	/**
 	 * taskName.

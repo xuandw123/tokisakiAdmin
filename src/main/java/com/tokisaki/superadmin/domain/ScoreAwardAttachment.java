@@ -9,17 +9,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tokisaki.superadmin.model.AbstractLifecycleEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "T_ScoreAward_TASK_Attachment")
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -34,7 +35,6 @@ public class ScoreAwardAttachment extends AbstractLifecycleEntity implements Ser
 	 */
 	@JsonBackReference
 	@ManyToOne
-	@JoinColumn(name="ScoreAward_ID")
     private ScoreAward scoreAward;
 	/**
 	 * taskName.

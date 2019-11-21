@@ -1,10 +1,9 @@
 package com.tokisaki.superadmin.domain;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,6 +16,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sun.istack.NotNull;
 import com.tokisaki.superadmin.enums.StatusEnum;
@@ -25,16 +27,18 @@ import com.tokisaki.superadmin.model.AbstractLifecycleEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "T_TASK")
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Task extends AbstractLifecycleEntity implements Serializable {
+public class Task extends AbstractLifecycleEntity {
 
     /**
 	 * 
@@ -63,7 +67,7 @@ public class Task extends AbstractLifecycleEntity implements Serializable {
    	 * userGroup.
    	 */
     @ManyToOne
-    @JoinColumn(name="CREATE_USER_ID")
+    @JoinColumn(updatable = false, name="CREATE_USER_ID")
 	private User createUser;
 	@Column
 	@NotNull
@@ -78,11 +82,10 @@ public class Task extends AbstractLifecycleEntity implements Serializable {
 	 */
 	@Column
     private BigDecimal taskScore;
-	
+	@Fetch(FetchMode.SELECT)
 	@JsonManagedReference
-	@OneToMany(mappedBy = "task", fetch=FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-	@Builder.Default
-	private Set<TaskAttachment> taskAttachment= new HashSet<>();
+	@OneToMany(mappedBy = "task",fetch=FetchType.EAGER,cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<TaskAttachment> taskAttachment= new ArrayList<>();
 	/**
 	 * type
 	 * 0 短期

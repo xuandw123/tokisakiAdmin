@@ -1,9 +1,9 @@
 package com.tokisaki.superadmin.domain;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -15,17 +15,22 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.tokisaki.superadmin.model.AbstractLifecycleEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name="T_USERTASK")
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -63,7 +68,8 @@ public class UserTask   extends AbstractLifecycleEntity  {
 	private User auditUser;
     
 	@JsonManagedReference
+	@Fetch(FetchMode.SELECT)
 	@OneToMany(mappedBy = "userTask", fetch=FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Builder.Default
-	private Set<UserTaskAttachment> utAttachment= new HashSet<>();
+	private List<UserTaskAttachment> utAttachment= new ArrayList<>();
 }

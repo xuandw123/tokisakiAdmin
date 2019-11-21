@@ -19,6 +19,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.data.annotation.Transient;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -30,12 +32,14 @@ import com.tokisaki.superadmin.model.AbstractLifecycleEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name="T_USER")
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -92,6 +96,7 @@ public class User   extends AbstractLifecycleEntity implements UserDetails {
     /**
    	 * userGroup.
    	 */
+    @Fetch(FetchMode.SELECT)
     @OneToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="groupId",referencedColumnName="ID")
 	private UserGroup userGroup;
@@ -100,7 +105,7 @@ public class User   extends AbstractLifecycleEntity implements UserDetails {
    	 */
        @Column
        private String  groupTitle;
-
+       @Fetch(FetchMode.SELECT)
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
     private List<String> roles = new ArrayList<>();

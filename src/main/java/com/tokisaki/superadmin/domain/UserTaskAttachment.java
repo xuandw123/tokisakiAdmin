@@ -15,11 +15,14 @@ import com.tokisaki.superadmin.model.AbstractLifecycleEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "T_User_TASK_Attachment")
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -34,7 +37,6 @@ public class UserTaskAttachment extends AbstractLifecycleEntity implements Seria
 	 */
 	@JsonBackReference
 	@ManyToOne
-	@JoinColumn(name="USERTASK_ID")
     private UserTask userTask;
 	/**
 	 * taskName.
