@@ -20,13 +20,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "T_User_TASK_Attachment")
+@Table(name = "T_UserTASK_Attachment")
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserTaskAttachment extends AbstractLifecycleEntity implements Serializable {
+public class UsertaskAttachment extends AbstractLifecycleEntity implements Serializable {
 
     /**
 	 * 
@@ -37,7 +37,7 @@ public class UserTaskAttachment extends AbstractLifecycleEntity implements Seria
 	 */
 	@JsonBackReference
 	@ManyToOne
-    private UserTask userTask;
+    private Usertask usertask;
 	/**
 	 * taskName.
 	 */

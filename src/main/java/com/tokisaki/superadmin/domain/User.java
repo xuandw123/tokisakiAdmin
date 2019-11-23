@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.toList;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -27,6 +28,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.istack.NotNull;
 import com.tokisaki.superadmin.enums.StatusEnum;
 import com.tokisaki.superadmin.model.AbstractLifecycleEntity;
 
@@ -93,6 +95,8 @@ public class User   extends AbstractLifecycleEntity implements UserDetails {
     private String password;
     @Transient
     private BigDecimal totalScore;
+    @Column
+    private Date registerDate;
     /**
    	 * userGroup.
    	 */

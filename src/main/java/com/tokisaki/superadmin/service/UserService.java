@@ -59,4 +59,8 @@ public class UserService {
 		}
 		return list;
 	}
+
+	public Object searchById(String userId) {
+		return this.userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User", userId));
+	}
 }

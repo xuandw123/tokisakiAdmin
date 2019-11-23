@@ -33,7 +33,11 @@ public class UserController {
     public ResponseEntity<Object>  all() {
         return ok(this.users.findAll());
     }
-    @GetMapping("/search")
+    @GetMapping("/{userId}")
+    public ResponseEntity<Object>  findById(String userId) {
+        return ok(this.userService.searchById(userId));
+    }
+    @GetMapping("/search/")
     public ResponseEntity<Object>  search(@RequestParam(value = "groupId", required = false) String groupId,@RequestParam(value = "userStatus", required = false) StatusEnum userStatus) {
         return ok(this.userService.search(groupId,userStatus));
     }

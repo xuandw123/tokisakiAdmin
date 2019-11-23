@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tokisaki.superadmin.domain.ScoreAward;
 import com.tokisaki.superadmin.exception.InvalidInputParamException;
 import com.tokisaki.superadmin.exception.NotFoundException;
+import com.tokisaki.superadmin.model.Response;
 import com.tokisaki.superadmin.repository.ScoreAwardRepository;
 import com.tokisaki.superadmin.service.ScoreAwardService;
 
@@ -60,12 +61,11 @@ public class ScoreAwardController {
 		return created(new URI(saved.getId())).build();
 	}
 
-	@DeleteMapping(name = "Delete ScoreAward", value = "/{scoreAwardId}",  consumes =
-    	    "application/json", produces = "application/json")
+	@DeleteMapping(name = "Delete ScoreAward", value = "/{scoreAwardId}")
     	    public ResponseEntity<Object>  deleteScoreAward(@PathVariable("scoreAwardId") String scoreAwardId) throws InvalidInputParamException, URISyntaxException{
-  
+		Response<Void> res=new Response<>();
     	scoreAwardService.delete(scoreAwardId);
-    	        return ok("delete:"+scoreAwardId);
+    	        return ok(res);
     	    }
 
 }

@@ -34,7 +34,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserTask   extends AbstractLifecycleEntity  {
+public class Usertask   extends AbstractLifecycleEntity  {
     /**
 	 * 
 	 */
@@ -45,7 +45,7 @@ public class UserTask   extends AbstractLifecycleEntity  {
 	 */
 	@ManyToOne
 	@JoinColumn(name="USER_ID")
-    private User User;
+    private User user;
 	/**
 	 * taskName.
 	 */
@@ -66,10 +66,11 @@ public class UserTask   extends AbstractLifecycleEntity  {
     @ManyToOne
     @JoinColumn(name="AUDIT_USER_ID")
 	private User auditUser;
-    
+    @Column
+    private Date auditDate;
 	@JsonManagedReference
 	@Fetch(FetchMode.SELECT)
-	@OneToMany(mappedBy = "userTask", fetch=FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "usertask", fetch=FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
 	@Builder.Default
-	private List<UserTaskAttachment> utAttachment= new ArrayList<>();
+	private List<UsertaskAttachment> utAttachment= new ArrayList<>();
 }
