@@ -80,5 +80,11 @@ public class UserTaskService  {
 		usertask.setAuditDate(new Date());
 		return this.userTaskRepository.save(usertask);
 	}
+
+
+	public List<Usertask> getUserTaskByTaskId(String taskId) {
+		Task task=taskRepository.findById(taskId).orElseThrow( () -> new NotFoundException("Task",taskId));
+		return this.userTaskRepository.findByTask(task);
+	}
     
 }

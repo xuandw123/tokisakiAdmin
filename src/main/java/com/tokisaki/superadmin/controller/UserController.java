@@ -34,7 +34,7 @@ public class UserController {
         return ok(this.users.findAll());
     }
     @GetMapping("/{userId}")
-    public ResponseEntity<Object>  findById(String userId) {
+    public ResponseEntity<Object>  findById(@PathVariable("userId") String userId) {
         return ok(this.userService.searchById(userId));
     }
     @GetMapping("/search/")

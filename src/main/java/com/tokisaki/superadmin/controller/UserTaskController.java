@@ -50,6 +50,10 @@ public class UserTaskController {
     public ResponseEntity<Object>  getUserTaskByUserIdAndTaskId(@PathVariable("userId") String userId,@PathVariable("taskId") String taskId) {
         return ok(this.userTaskService.getUserTaskByUserIdAndTaskId(userId,taskId));
     }
+    @GetMapping("/task/{taskId}/")
+    public ResponseEntity<Object>  getUserTaskByTaskId(@PathVariable("taskId") String taskId) {
+        return ok(this.userTaskService.getUserTaskByTaskId(taskId));
+    }
     @GetMapping("/task/{taskId}/forme/")
     public ResponseEntity<Object>  getUserTaskByTaskIdforme(@PathVariable("taskId") String taskId) {
         return ok(this.userTaskService.getUserTaskByTaskIdforme(taskId));

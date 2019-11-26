@@ -14,4 +14,5 @@ public interface UserTaskRepository extends JpaRepository<Usertask, String> {
 
 	List<Usertask> findByUser(@Param("user") User user);
 	List<Usertask> findByTaskAndUser(@Param("task") Task task,@Param("user") User user);
+	List<Usertask> findByTask(@Param("task") Task task);
 }
