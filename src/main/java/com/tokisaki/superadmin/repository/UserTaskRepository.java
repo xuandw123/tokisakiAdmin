@@ -18,6 +18,5 @@ public interface UserTaskRepository extends JpaRepository<Usertask, String> {
 	List<Usertask> findByTaskAndUser(@Param("task") Task task,@Param("user") User user);
 	List<Usertask> findByTask(@Param("task") Task task);
 	
-	//@Query("select t.user.id as userId,sum(t.taskScore)as taskScore from usertask t group by t.user.id order by sum(t.taskScore) desc"，nativeQuery=true)
-	//List<UserScore> selectScore();
+
 }

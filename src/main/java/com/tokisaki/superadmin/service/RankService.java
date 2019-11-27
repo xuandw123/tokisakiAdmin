@@ -1,6 +1,17 @@
 package com.tokisaki.superadmin.service;
 
+import java.math.BigDecimal;
+import java.time.DayOfWeek;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.temporal.TemporalField;
+import java.time.temporal.WeekFields;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -8,26 +19,70 @@ import org.springframework.stereotype.Component;
 import com.tokisaki.superadmin.common.CommonUtil;
 import com.tokisaki.superadmin.domain.User;
 import com.tokisaki.superadmin.domain.UserGroup;
-import com.tokisaki.superadmin.model.UserScore;
-import com.tokisaki.superadmin.repository.UserTaskRepository;
+import com.tokisaki.superadmin.entity.UseScoreEntity;
+import com.tokisaki.superadmin.repository.UserRepository;
+import com.tokisaki.superadmin.repository.UserScoreRepository;
 
 @Component
-public class RankService  {
+public class RankService {
+
 	@Autowired
-    private UserTaskRepository userTaskRepository;
+	private UserRepository userRepository;
 
-    public RankService(UserTaskRepository userTaskRepository) {
-        this.userTaskRepository = userTaskRepository;
-    }
-
-
-
-	public Object rankForGroup() {
-		User user=CommonUtil.getCurrentUser().get();
-		//List<UserScore> list=userTaskRepository.selectScore();
-		UserGroup usergroup=user.getUserGroup();
-		
-		return null;
+	public RankService(UserRepository userRepository) {
+		this.userRepository = userRepository;
 	}
-    
+
+	public UseScoreEntity rankForGroupAndLimit() {
+		UseScoreEntity useScoreEntity = new UseScoreEntity();
+		long currentWeek = 0;
+		Instant localDate = Instant.now();
+		ZonedDateTime chicago = localDate.atZone(ZoneId.of("Asia/Shanghai"));
+		LocalDate localdate = chicago.toLocalDate();
+		WeekFields weekFields = WeekFields.of(DayOfWeek.MONDAY, 4);
+		currentWeek = localdate.get(weekFields.weekOfWeekBasedYear());
+		long currentYear = localdate.getYear();
+		long currentMonth = localdate.getMonthValue();
+		TemporalField fieldISO = WeekFields.of(Locale.FRANCE).dayOfWeek();
+		Date weekStart = Date.from(localdate.with(fieldISO, 1).atStartOfDay(ZoneId.of("Asia/Shanghai")).toInstant());
+		Date weekEnd = Date.from(localdate.with(fieldISO, 7).atStartOfDay(ZoneId.of("Asia/Shanghai")).plusDays(1L)
+				.minusNanos(1L).toInstant());
+		Date monthStart = Date.from(LocalDate.of(localdate.getYear(), localdate.getMonth(), 1)
+				.atStartOfDay(ZoneId.of("Asia/Shanghai")).toInstant());
+		Date monthEnd = Date.from(LocalDate.of(localdate.getYear(), localdate.getMonth(), 1)
+				.atStartOfDay(ZoneId.of("Asia/Shanghai")).plusMonths(1L).minusNanos(1L).toInstant());
+
+		User user = CommonUtil.getCurrentUser().get();
+		UserGroup usergroup = user.getUserGroup();
+		useScoreEntity.setWeekStart(weekStart);
+		useScoreEntity.setWeekEnd(weekEnd);
+		useScoreEntity.setMonthStart(monthStart);
+		useScoreEntity.setMonthEnd(monthEnd);
+		useScoreEntity.setAllList(resetScore(userRepository.selectScore()));
+		useScoreEntity.setWeekList(resetScore(userRepository.selectScoreAndTimeLimit(weekStart, weekEnd)));
+		useScoreEntity.setMonthList(resetScore(userRepository.selectScoreAndTimeLimit(monthStart, monthEnd)));
+		if (usergroup != null) {
+			String groupId = usergroup.getId();
+			useScoreEntity.setGroupList(resetScore(userRepository.selectScoreByGroupId(groupId)));
+			useScoreEntity.setGroupWeekList(
+					resetScore(userRepository.selectScoreByGroupIdAndTimeLimit(groupId, weekStart, weekEnd)));
+			useScoreEntity.setGroupMonthList(
+					resetScore(userRepository.selectScoreByGroupIdAndTimeLimit(groupId, monthStart, monthEnd)));
+		}
+		useScoreEntity.setYear(currentYear);
+		useScoreEntity.setMonth(currentMonth);
+		useScoreEntity.setWeek(currentWeek);
+		return useScoreEntity;
+	}
+
+	private List<User> resetScore(List<Object[]> list) {
+		List<User> lst = new ArrayList<>();
+		for (Object[] obj : list) {
+			User user = (User) obj[0];
+			BigDecimal score = (BigDecimal) obj[1];
+			user.setTotalScore(score);
+			lst.add(user);
+		}
+		return lst;
+	}
 }
