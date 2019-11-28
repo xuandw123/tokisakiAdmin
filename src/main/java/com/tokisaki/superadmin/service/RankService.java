@@ -75,6 +75,42 @@ public class RankService {
 		return useScoreEntity;
 	}
 
+	public UseScoreEntity rankForGroupAndLimitByGroupId(String groupIdParam) {
+		UseScoreEntity useScoreEntity = new UseScoreEntity();
+		long currentWeek = 0;
+		Instant localDate = Instant.now();
+		ZonedDateTime chicago = localDate.atZone(ZoneId.of("Asia/Shanghai"));
+		LocalDate localdate = chicago.toLocalDate();
+		WeekFields weekFields = WeekFields.of(DayOfWeek.MONDAY, 4);
+		currentWeek = localdate.get(weekFields.weekOfWeekBasedYear());
+		long currentYear = localdate.getYear();
+		long currentMonth = localdate.getMonthValue();
+		TemporalField fieldISO = WeekFields.of(Locale.FRANCE).dayOfWeek();
+		Date weekStart = Date.from(localdate.with(fieldISO, 1).atStartOfDay(ZoneId.of("Asia/Shanghai")).toInstant());
+		Date weekEnd = Date.from(localdate.with(fieldISO, 7).atStartOfDay(ZoneId.of("Asia/Shanghai")).plusDays(1L)
+				.minusNanos(1L).toInstant());
+		Date monthStart = Date.from(LocalDate.of(localdate.getYear(), localdate.getMonth(), 1)
+				.atStartOfDay(ZoneId.of("Asia/Shanghai")).toInstant());
+		Date monthEnd = Date.from(LocalDate.of(localdate.getYear(), localdate.getMonth(), 1)
+				.atStartOfDay(ZoneId.of("Asia/Shanghai")).plusMonths(1L).minusNanos(1L).toInstant());
+
+		useScoreEntity.setWeekStart(weekStart);
+		useScoreEntity.setWeekEnd(weekEnd);
+		useScoreEntity.setMonthStart(monthStart);
+
+		String groupId = groupIdParam;
+		useScoreEntity.setGroupList(resetScore(userRepository.selectScoreByGroupId(groupId)));
+		useScoreEntity.setGroupWeekList(
+				resetScore(userRepository.selectScoreByGroupIdAndTimeLimit(groupId, weekStart, weekEnd)));
+		useScoreEntity.setGroupMonthList(
+				resetScore(userRepository.selectScoreByGroupIdAndTimeLimit(groupId, monthStart, monthEnd)));
+
+		useScoreEntity.setYear(currentYear);
+		useScoreEntity.setMonth(currentMonth);
+		useScoreEntity.setWeek(currentWeek);
+		return useScoreEntity;
+	}
+
 	private List<User> resetScore(List<Object[]> list) {
 		List<User> lst = new ArrayList<>();
 		for (Object[] obj : list) {
@@ -85,4 +121,5 @@ public class RankService {
 		}
 		return lst;
 	}
+
 }

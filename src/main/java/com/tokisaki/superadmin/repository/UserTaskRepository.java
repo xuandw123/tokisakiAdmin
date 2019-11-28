@@ -1,5 +1,6 @@
 package com.tokisaki.superadmin.repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,6 +18,7 @@ public interface UserTaskRepository extends JpaRepository<Usertask, String> {
 	List<Usertask> findByUser(@Param("user") User user);
 	List<Usertask> findByTaskAndUser(@Param("task") Task task,@Param("user") User user);
 	List<Usertask> findByTask(@Param("task") Task task);
-	
+	@Query("select sum(t.taskScore)as taskScore from Usertask t where t.user.id=:userId")
+	BigDecimal sumTaskScore(@Param("userId") String userId);
 
 }

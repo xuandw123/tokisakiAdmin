@@ -32,7 +32,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
       connection-test-query: SELECT 1 FROM DUAL
-      idle-timeout: 10000
+      idle-timeout: 10000000
       minimum-idle: 5
       maximum-pool-size: 20
       connection-timeout: 60000
