@@ -22,8 +22,12 @@ public interface UserRepository extends JpaRepository<User, String> {
 	
 	@Query("select t.user,sum(t.taskScore)as taskScore from Usertask t group by t.user order by sum(t.taskScore) desc")
 	List<Object[]> selectScore();
+	@Query("select t.user,sum(t.taskScore)as taskScore from Usertask t where t.task.id =:taskId group by t.user order by sum(t.taskScore) desc")
+	List<Object[]> selectScoreByTaskId(@Param("taskId") String taskId);
 	@Query("select t.user,sum(t.taskScore)as taskScore from Usertask t  where t.user.id in(select  id from User  t2 where t2. userGroup.id=:groupId) group by t.user order by sum(t.taskScore) desc")
 	List<Object[]> selectScoreByGroupId(@Param("groupId") String groupId);
+	@Query("select t.user,sum(t.taskScore)as taskScore from Usertask t  where t.task.id =:taskId  and t.user.id in(select  id from User  t2 where t2. userGroup.id=:groupId) group by t.user order by sum(t.taskScore) desc")
+	List<Object[]> selectScoreByGroupIdAndTaskId(@Param("groupId") String groupId,@Param("taskId") String taskId);
 	@Query("select t.user,sum(t.taskScore)as taskScore from Usertask t where  t.finishedDate >=:from and   t.finishedDate  <=:to group by t.user order by sum(t.taskScore) desc")
 	List<Object[]> selectScoreAndTimeLimit(@Param("from") Date from, @Param("to") Date to);
 	@Query("select t.user,sum(t.taskScore)as taskScore from Usertask t  where t.user.id in(select  id from User  t2 where t2. userGroup.id=:groupId) and  t.finishedDate >=:from and   t.finishedDate  <=:to  group by t.user order by sum(t.taskScore) desc")

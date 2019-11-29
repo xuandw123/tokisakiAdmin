@@ -28,6 +28,16 @@ public class RankController {
     	
         return ok(this.rankService.rankForGroupAndLimit());
     }
+    @GetMapping("/groupRankforTask/{taskId}")
+    public ResponseEntity<UseScoreEntity>  rankForGroupByTaskId(@PathVariable("taskId") String taskId) {
+    	
+        return ok(this.rankService.rankForGroupByTaskId(taskId));
+    }
+    @GetMapping("/groupRankforTask/{taskId}/{groupId}")
+    public ResponseEntity<UseScoreEntity>  rankForGroupByTaskIdAndGroupId(@PathVariable("taskId") String taskId,@PathVariable("groupId") String groupId) {
+    	
+        return ok(this.rankService.rankForGroupByTaskIdAndGroupId(taskId,groupId));
+    }
     
     @GetMapping("/groupRank/{groupId}")
     public ResponseEntity<UseScoreEntity>  rankForGroupByGroupId(@PathVariable("groupId") String groupId) {
