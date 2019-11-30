@@ -19,7 +19,7 @@ public interface UserRepository extends JpaRepository<User, String> {
     List<User> findByUserGroupId(@Param("groupId") String groupId);
 	List<User> findByUserStatus(@Param("userStatus") StatusEnum userStatus);
 	List<User> findByUserStatusAndUserGroupId(@Param("userStatus") StatusEnum userStatus, @Param("groupId")String groupId);
-	
+	Optional<User> findByOpenid(@Param("openid")String openid);
 	@Query("select t.user,sum(t.taskScore)as taskScore from Usertask t group by t.user order by sum(t.taskScore) desc")
 	List<Object[]> selectScore();
 	@Query("select t.user,sum(t.taskScore)as taskScore from Usertask t where t.task.id =:taskId group by t.user order by sum(t.taskScore) desc")

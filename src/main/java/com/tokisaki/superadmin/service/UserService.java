@@ -40,22 +40,23 @@ public class UserService {
 		user.setUserGroup(userGroup);
 		return this.userRepository.save(user);
 	}
+
 	public List<User> search(String groupId, StatusEnum userStatus) {
-		List<User> list=new ArrayList<>();
-		if(StringUtils.isEmpty(groupId)&&userStatus==null ) {
-			list= this.userRepository.findAll();
+		List<User> list = new ArrayList<>();
+		if (StringUtils.isEmpty(groupId) && userStatus == null) {
+			list = this.userRepository.findAll();
 		}
-		if(!StringUtils.isEmpty(groupId)&&userStatus==null) {
-			
-			list= this.userRepository.findByUserGroupId(groupId);
+		if (!StringUtils.isEmpty(groupId) && userStatus == null) {
+
+			list = this.userRepository.findByUserGroupId(groupId);
 		}
-		if(StringUtils.isEmpty(groupId)&&userStatus!=null) {
-			
-			list= this.userRepository.findByUserStatus(userStatus);
+		if (StringUtils.isEmpty(groupId) && userStatus != null) {
+
+			list = this.userRepository.findByUserStatus(userStatus);
 		}
-	if(!StringUtils.isEmpty(groupId)&&userStatus!=null) {
-			
-			list= this.userRepository.findByUserStatusAndUserGroupId(userStatus,groupId);
+		if (!StringUtils.isEmpty(groupId) && userStatus != null) {
+
+			list = this.userRepository.findByUserStatusAndUserGroupId(userStatus, groupId);
 		}
 		return list;
 	}

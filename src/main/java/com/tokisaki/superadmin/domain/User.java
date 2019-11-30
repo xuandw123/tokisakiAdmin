@@ -113,7 +113,11 @@ public class User   extends AbstractLifecycleEntity implements UserDetails {
     @ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
     private List<String> roles = new ArrayList<>();
-    
+       @Column
+       private String openid;
+       
+       @Column(columnDefinition = "ENUM('0', '1')")
+       private String ifblind;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles.stream().map(SimpleGrantedAuthority::new).collect(toList());
